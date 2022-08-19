@@ -14,7 +14,7 @@ export const MahasiswaList = (props: ListProps): React.ReactElement => {
       <Datagrid rowClick="show">
         <DateField source="createdAt" label="Created At" />
         <TextField label="ID" source="id" />
-        <TextField label="nama" source="nama" />
+        <TextField label="nama_mahasiswa" source="namaMahasiswa" />
         <TextField label="npm" source="npm" />
         <DateField source="updatedAt" label="Updated At" />
       </Datagrid>

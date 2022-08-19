@@ -11,7 +11,9 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from "class-validator";
+import { IsString, ValidateNested, IsOptional } from "class-validator";
+import { DosenCreateNestedManyWithoutMahasiswasInput } from "./DosenCreateNestedManyWithoutMahasiswasInput";
+import { Type } from "class-transformer";
 @InputType()
 class MahasiswaCreateInput {
   @ApiProperty({
@@ -20,7 +22,19 @@ class MahasiswaCreateInput {
   })
   @IsString()
   @Field(() => String)
-  nama!: string;
+  namaMahasiswa!: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => DosenCreateNestedManyWithoutMahasiswasInput,
+  })
+  @ValidateNested()
+  @Type(() => DosenCreateNestedManyWithoutMahasiswasInput)
+  @IsOptional()
+  @Field(() => DosenCreateNestedManyWithoutMahasiswasInput, {
+    nullable: true,
+  })
+  nidnDosen?: DosenCreateNestedManyWithoutMahasiswasInput;
 
   @ApiProperty({
     required: true,

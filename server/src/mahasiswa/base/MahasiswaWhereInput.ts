@@ -13,7 +13,8 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { DosenListRelationFilter } from "../../dosen/base/DosenListRelationFilter";
 @InputType()
 class MahasiswaWhereInput {
   @ApiProperty({
@@ -36,7 +37,19 @@ class MahasiswaWhereInput {
   @Field(() => StringFilter, {
     nullable: true,
   })
-  nama?: StringFilter;
+  namaMahasiswa?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => DosenListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => DosenListRelationFilter)
+  @IsOptional()
+  @Field(() => DosenListRelationFilter, {
+    nullable: true,
+  })
+  nidnDosen?: DosenListRelationFilter;
 
   @ApiProperty({
     required: false,

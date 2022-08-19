@@ -19,12 +19,15 @@ import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { Public } from "../../decorators/public.decorator";
 import { CreateMahasiswaArgs } from "./CreateMahasiswaArgs";
 import { UpdateMahasiswaArgs } from "./UpdateMahasiswaArgs";
 import { DeleteMahasiswaArgs } from "./DeleteMahasiswaArgs";
 import { MahasiswaFindManyArgs } from "./MahasiswaFindManyArgs";
 import { MahasiswaFindUniqueArgs } from "./MahasiswaFindUniqueArgs";
 import { Mahasiswa } from "./Mahasiswa";
+import { DosenFindManyArgs } from "../../dosen/base/DosenFindManyArgs";
+import { Dosen } from "../../dosen/base/Dosen";
 import { MahasiswaService } from "../mahasiswa.service";
 
 @graphql.Resolver(() => Mahasiswa)
@@ -144,5 +147,20 @@ export class MahasiswaResolverBase {
       }
       throw error;
     }
+  }
+
+  @Public()
+  @graphql.ResolveField(() => [Dosen])
+  async nidnDosen(
+    @graphql.Parent() parent: Mahasiswa,
+    @graphql.Args() args: DosenFindManyArgs
+  ): Promise<Dosen[]> {
+    const results = await this.service.findNidnDosen(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 }

@@ -43,7 +43,7 @@ class MahasiswaOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  nama?: SortOrder;
+  namaMahasiswa?: SortOrder;
 
   @ApiProperty({
     required: false,

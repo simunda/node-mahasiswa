@@ -1,4 +1,7 @@
+import { DosenCreateNestedManyWithoutMahasiswasInput } from "./DosenCreateNestedManyWithoutMahasiswasInput";
+
 export type MahasiswaCreateInput = {
-  nama: string;
+  namaMahasiswa: string;
+  nidnDosen?: DosenCreateNestedManyWithoutMahasiswasInput;
   npm: string;
 };

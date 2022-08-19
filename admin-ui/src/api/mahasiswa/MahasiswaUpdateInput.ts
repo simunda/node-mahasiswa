@@ -1,4 +1,7 @@
+import { DosenUpdateManyWithoutMahasiswasInput } from "./DosenUpdateManyWithoutMahasiswasInput";
+
 export type MahasiswaUpdateInput = {
-  nama?: string;
+  namaMahasiswa?: string;
+  nidnDosen?: DosenUpdateManyWithoutMahasiswasInput;
   npm?: string;
 };
