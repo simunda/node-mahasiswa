@@ -13,6 +13,10 @@ import { MahasiswaList } from "./mahasiswa/MahasiswaList";
 import { MahasiswaCreate } from "./mahasiswa/MahasiswaCreate";
 import { MahasiswaEdit } from "./mahasiswa/MahasiswaEdit";
 import { MahasiswaShow } from "./mahasiswa/MahasiswaShow";
+import { DosenList } from "./dosen/DosenList";
+import { DosenCreate } from "./dosen/DosenCreate";
+import { DosenEdit } from "./dosen/DosenEdit";
+import { DosenShow } from "./dosen/DosenShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -52,6 +56,13 @@ const App = (): React.ReactElement => {
           edit={MahasiswaEdit}
           create={MahasiswaCreate}
           show={MahasiswaShow}
+        />
+        <Resource
+          name="Dosen"
+          list={DosenList}
+          edit={DosenEdit}
+          create={DosenCreate}
+          show={DosenShow}
         />
       </Admin>
     </div>
