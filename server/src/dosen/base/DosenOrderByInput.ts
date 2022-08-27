@@ -43,7 +43,7 @@ class DosenOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  mahasiswa?: SortOrder;
+  nama?: SortOrder;
 
   @ApiProperty({
     required: false,
@@ -52,7 +52,7 @@ class DosenOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  namaDosen?: SortOrder;
+  nidn?: SortOrder;
 
   @ApiProperty({
     required: false,

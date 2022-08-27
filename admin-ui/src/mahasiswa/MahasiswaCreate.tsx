@@ -1,29 +1,22 @@
 import * as React from "react";
-
 import {
   Create,
   SimpleForm,
   CreateProps,
+  ReferenceInput,
+  SelectInput,
   TextInput,
-  ReferenceArrayInput,
-  SelectArrayInput,
 } from "react-admin";
-
 import { DosenTitle } from "../dosen/DosenTitle";
 
 export const MahasiswaCreate = (props: CreateProps): React.ReactElement => {
   return (
     <Create {...props}>
       <SimpleForm>
-        <TextInput label="nama_mahasiswa" source="namaMahasiswa" />
-        <ReferenceArrayInput
-          source="nidnDosen"
-          reference="Dosen"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={DosenTitle} />
-        </ReferenceArrayInput>
+        <ReferenceInput source="dosen.id" reference="Dosen" label="dosenpa">
+          <SelectInput optionText={DosenTitle} />
+        </ReferenceInput>
+        <TextInput label="Nama" source="nama" />
         <TextInput label="npm" source="npm" />
       </SimpleForm>
     </Create>

@@ -1,7 +1,9 @@
 import { MahasiswaCreateNestedManyWithoutDosensInput } from "./MahasiswaCreateNestedManyWithoutDosensInput";
+import { MatakuliahCreateNestedManyWithoutDosensInput } from "./MatakuliahCreateNestedManyWithoutDosensInput";
 
 export type DosenCreateInput = {
-  mahasiswa?: string | null;
-  namaDosen?: string | null;
-  nidn?: MahasiswaCreateNestedManyWithoutDosensInput;
+  mahasiswas?: MahasiswaCreateNestedManyWithoutDosensInput;
+  matakuliahs?: MatakuliahCreateNestedManyWithoutDosensInput;
+  nama?: string | null;
+  nidn: string;
 };

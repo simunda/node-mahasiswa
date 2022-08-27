@@ -14,8 +14,9 @@ import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
-import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { MahasiswaListRelationFilter } from "../../mahasiswa/base/MahasiswaListRelationFilter";
+import { MatakuliahListRelationFilter } from "../../matakuliah/base/MatakuliahListRelationFilter";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
 @InputType()
 class DosenWhereInput {
   @ApiProperty({
@@ -31,28 +32,6 @@ class DosenWhereInput {
 
   @ApiProperty({
     required: false,
-    type: StringNullableFilter,
-  })
-  @Type(() => StringNullableFilter)
-  @IsOptional()
-  @Field(() => StringNullableFilter, {
-    nullable: true,
-  })
-  mahasiswa?: StringNullableFilter;
-
-  @ApiProperty({
-    required: false,
-    type: StringNullableFilter,
-  })
-  @Type(() => StringNullableFilter)
-  @IsOptional()
-  @Field(() => StringNullableFilter, {
-    nullable: true,
-  })
-  namaDosen?: StringNullableFilter;
-
-  @ApiProperty({
-    required: false,
     type: () => MahasiswaListRelationFilter,
   })
   @ValidateNested()
@@ -61,6 +40,40 @@ class DosenWhereInput {
   @Field(() => MahasiswaListRelationFilter, {
     nullable: true,
   })
-  nidn?: MahasiswaListRelationFilter;
+  mahasiswas?: MahasiswaListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => MatakuliahListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => MatakuliahListRelationFilter)
+  @IsOptional()
+  @Field(() => MatakuliahListRelationFilter, {
+    nullable: true,
+  })
+  matakuliahs?: MatakuliahListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  nama?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringFilter,
+  })
+  @Type(() => StringFilter)
+  @IsOptional()
+  @Field(() => StringFilter, {
+    nullable: true,
+  })
+  nidn?: StringFilter;
 }
 export { DosenWhereInput };

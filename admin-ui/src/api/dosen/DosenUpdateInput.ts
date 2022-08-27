@@ -1,7 +1,9 @@
 import { MahasiswaUpdateManyWithoutDosensInput } from "./MahasiswaUpdateManyWithoutDosensInput";
+import { MatakuliahUpdateManyWithoutDosensInput } from "./MatakuliahUpdateManyWithoutDosensInput";
 
 export type DosenUpdateInput = {
-  mahasiswa?: string | null;
-  namaDosen?: string | null;
-  nidn?: MahasiswaUpdateManyWithoutDosensInput;
+  mahasiswas?: MahasiswaUpdateManyWithoutDosensInput;
+  matakuliahs?: MatakuliahUpdateManyWithoutDosensInput;
+  nama?: string | null;
+  nidn?: string;
 };

@@ -11,35 +11,14 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, ValidateNested } from "class-validator";
 import { MahasiswaCreateNestedManyWithoutDosensInput } from "./MahasiswaCreateNestedManyWithoutDosensInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { MatakuliahCreateNestedManyWithoutDosensInput } from "./MatakuliahCreateNestedManyWithoutDosensInput";
 @InputType()
 class DosenCreateInput {
   @ApiProperty({
     required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  mahasiswa?: string | null;
-
-  @ApiProperty({
-    required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  namaDosen?: string | null;
-
-  @ApiProperty({
-    required: true,
     type: () => MahasiswaCreateNestedManyWithoutDosensInput,
   })
   @ValidateNested()
@@ -48,6 +27,37 @@ class DosenCreateInput {
   @Field(() => MahasiswaCreateNestedManyWithoutDosensInput, {
     nullable: true,
   })
-  nidn?: MahasiswaCreateNestedManyWithoutDosensInput;
+  mahasiswas?: MahasiswaCreateNestedManyWithoutDosensInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => MatakuliahCreateNestedManyWithoutDosensInput,
+  })
+  @ValidateNested()
+  @Type(() => MatakuliahCreateNestedManyWithoutDosensInput)
+  @IsOptional()
+  @Field(() => MatakuliahCreateNestedManyWithoutDosensInput, {
+    nullable: true,
+  })
+  matakuliahs?: MatakuliahCreateNestedManyWithoutDosensInput;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  nama?: string | null;
+
+  @ApiProperty({
+    required: true,
+    type: String,
+  })
+  @IsString()
+  @Field(() => String)
+  nidn!: string;
 }
 export { DosenCreateInput };
