@@ -20,7 +20,6 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { DosenService } from "../dosen.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { Public } from "../../decorators/public.decorator";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { DosenCreateInput } from "./DosenCreateInput";
 import { DosenWhereInput } from "./DosenWhereInput";
@@ -31,6 +30,9 @@ import { Dosen } from "./Dosen";
 import { MahasiswaFindManyArgs } from "../../mahasiswa/base/MahasiswaFindManyArgs";
 import { Mahasiswa } from "../../mahasiswa/base/Mahasiswa";
 import { MahasiswaWhereUniqueInput } from "../../mahasiswa/base/MahasiswaWhereUniqueInput";
+import { MatakuliahFindManyArgs } from "../../matakuliah/base/MatakuliahFindManyArgs";
+import { Matakuliah } from "../../matakuliah/base/Matakuliah";
+import { MatakuliahWhereUniqueInput } from "../../matakuliah/base/MatakuliahWhereUniqueInput";
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class DosenControllerBase {
@@ -54,14 +56,19 @@ export class DosenControllerBase {
       select: {
         createdAt: true,
         id: true,
-        mahasiswa: true,
-        namaDosen: true,
+        nama: true,
+        nidn: true,
         updatedAt: true,
       },
     });
   }
 
-  @Public()
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "read",
+    possession: "any",
+  })
   @common.Get()
   @swagger.ApiOkResponse({ type: [Dosen] })
   @swagger.ApiForbiddenResponse()
@@ -73,8 +80,8 @@ export class DosenControllerBase {
       select: {
         createdAt: true,
         id: true,
-        mahasiswa: true,
-        namaDosen: true,
+        nama: true,
+        nidn: true,
         updatedAt: true,
       },
     });
@@ -98,8 +105,8 @@ export class DosenControllerBase {
       select: {
         createdAt: true,
         id: true,
-        mahasiswa: true,
-        namaDosen: true,
+        nama: true,
+        nidn: true,
         updatedAt: true,
       },
     });
@@ -132,8 +139,8 @@ export class DosenControllerBase {
         select: {
           createdAt: true,
           id: true,
-          mahasiswa: true,
-          namaDosen: true,
+          nama: true,
+          nidn: true,
           updatedAt: true,
         },
       });
@@ -165,8 +172,8 @@ export class DosenControllerBase {
         select: {
           createdAt: true,
           id: true,
-          mahasiswa: true,
-          namaDosen: true,
+          nama: true,
+          nidn: true,
           updatedAt: true,
         },
       });
@@ -186,19 +193,26 @@ export class DosenControllerBase {
     action: "read",
     possession: "any",
   })
-  @common.Get("/:id/nidn")
+  @common.Get("/:id/mahasiswas")
   @ApiNestedQuery(MahasiswaFindManyArgs)
-  async findManyNidn(
+  async findManyMahasiswas(
     @common.Req() request: Request,
     @common.Param() params: DosenWhereUniqueInput
   ): Promise<Mahasiswa[]> {
     const query = plainToClass(MahasiswaFindManyArgs, request.query);
-    const results = await this.service.findNidn(params.id, {
+    const results = await this.service.findMahasiswas(params.id, {
       ...query,
       select: {
         createdAt: true,
+
+        dosenpa: {
+          select: {
+            id: true,
+          },
+        },
+
         id: true,
-        namaMahasiswa: true,
+        nama: true,
         npm: true,
         updatedAt: true,
       },
@@ -216,13 +230,13 @@ export class DosenControllerBase {
     action: "update",
     possession: "any",
   })
-  @common.Post("/:id/nidn")
-  async connectNidn(
+  @common.Post("/:id/mahasiswas")
+  async connectMahasiswas(
     @common.Param() params: DosenWhereUniqueInput,
     @common.Body() body: MahasiswaWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      nidn: {
+      mahasiswas: {
         connect: body,
       },
     };
@@ -238,13 +252,13 @@ export class DosenControllerBase {
     action: "update",
     possession: "any",
   })
-  @common.Patch("/:id/nidn")
-  async updateNidn(
+  @common.Patch("/:id/mahasiswas")
+  async updateMahasiswas(
     @common.Param() params: DosenWhereUniqueInput,
     @common.Body() body: MahasiswaWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      nidn: {
+      mahasiswas: {
         set: body,
       },
     };
@@ -260,13 +274,117 @@ export class DosenControllerBase {
     action: "update",
     possession: "any",
   })
-  @common.Delete("/:id/nidn")
-  async disconnectNidn(
+  @common.Delete("/:id/mahasiswas")
+  async disconnectMahasiswas(
     @common.Param() params: DosenWhereUniqueInput,
     @common.Body() body: MahasiswaWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      nidn: {
+      mahasiswas: {
+        disconnect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @nestAccessControl.UseRoles({
+    resource: "Matakuliah",
+    action: "read",
+    possession: "any",
+  })
+  @common.Get("/:id/matakuliahs")
+  @ApiNestedQuery(MatakuliahFindManyArgs)
+  async findManyMatakuliahs(
+    @common.Req() request: Request,
+    @common.Param() params: DosenWhereUniqueInput
+  ): Promise<Matakuliah[]> {
+    const query = plainToClass(MatakuliahFindManyArgs, request.query);
+    const results = await this.service.findMatakuliahs(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+
+        dosenpengampu: {
+          select: {
+            id: true,
+          },
+        },
+
+        id: true,
+        kodemk: true,
+        namaMatakuliah: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "update",
+    possession: "any",
+  })
+  @common.Post("/:id/matakuliahs")
+  async connectMatakuliahs(
+    @common.Param() params: DosenWhereUniqueInput,
+    @common.Body() body: MatakuliahWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      matakuliahs: {
+        connect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "update",
+    possession: "any",
+  })
+  @common.Patch("/:id/matakuliahs")
+  async updateMatakuliahs(
+    @common.Param() params: DosenWhereUniqueInput,
+    @common.Body() body: MatakuliahWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      matakuliahs: {
+        set: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "update",
+    possession: "any",
+  })
+  @common.Delete("/:id/matakuliahs")
+  async disconnectMatakuliahs(
+    @common.Param() params: DosenWhereUniqueInput,
+    @common.Body() body: MatakuliahWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      matakuliahs: {
         disconnect: body,
       },
     };

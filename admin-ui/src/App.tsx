@@ -17,6 +17,10 @@ import { DosenList } from "./dosen/DosenList";
 import { DosenCreate } from "./dosen/DosenCreate";
 import { DosenEdit } from "./dosen/DosenEdit";
 import { DosenShow } from "./dosen/DosenShow";
+import { MatakuliahList } from "./matakuliah/MatakuliahList";
+import { MatakuliahCreate } from "./matakuliah/MatakuliahCreate";
+import { MatakuliahEdit } from "./matakuliah/MatakuliahEdit";
+import { MatakuliahShow } from "./matakuliah/MatakuliahShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -63,6 +67,13 @@ const App = (): React.ReactElement => {
           edit={DosenEdit}
           create={DosenCreate}
           show={DosenShow}
+        />
+        <Resource
+          name="Matakuliah"
+          list={MatakuliahList}
+          edit={MatakuliahEdit}
+          create={MatakuliahCreate}
+          show={MatakuliahShow}
         />
       </Admin>
     </div>

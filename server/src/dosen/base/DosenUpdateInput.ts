@@ -11,33 +11,12 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, ValidateNested } from "class-validator";
 import { MahasiswaUpdateManyWithoutDosensInput } from "./MahasiswaUpdateManyWithoutDosensInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { MatakuliahUpdateManyWithoutDosensInput } from "./MatakuliahUpdateManyWithoutDosensInput";
 @InputType()
 class DosenUpdateInput {
-  @ApiProperty({
-    required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  mahasiswa?: string | null;
-
-  @ApiProperty({
-    required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  namaDosen?: string | null;
-
   @ApiProperty({
     required: false,
     type: () => MahasiswaUpdateManyWithoutDosensInput,
@@ -48,6 +27,40 @@ class DosenUpdateInput {
   @Field(() => MahasiswaUpdateManyWithoutDosensInput, {
     nullable: true,
   })
-  nidn?: MahasiswaUpdateManyWithoutDosensInput;
+  mahasiswas?: MahasiswaUpdateManyWithoutDosensInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => MatakuliahUpdateManyWithoutDosensInput,
+  })
+  @ValidateNested()
+  @Type(() => MatakuliahUpdateManyWithoutDosensInput)
+  @IsOptional()
+  @Field(() => MatakuliahUpdateManyWithoutDosensInput, {
+    nullable: true,
+  })
+  matakuliahs?: MatakuliahUpdateManyWithoutDosensInput;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  nama?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  nidn?: string;
 }
 export { DosenUpdateInput };

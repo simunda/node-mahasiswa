@@ -47,14 +47,11 @@ export class MahasiswaServiceBase {
     return this.prisma.mahasiswa.delete(args);
   }
 
-  async findNidnDosen(
-    parentId: string,
-    args: Prisma.DosenFindManyArgs
-  ): Promise<Dosen[]> {
+  async getDosenpa(parentId: string): Promise<Dosen | null> {
     return this.prisma.mahasiswa
       .findUnique({
         where: { id: parentId },
       })
-      .nidnDosen(args);
+      .dosenpa();
   }
 }

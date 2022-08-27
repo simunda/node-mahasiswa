@@ -10,7 +10,7 @@ https://docs.amplication.com/docs/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "nestjs-prisma";
-import { Prisma, Dosen, Mahasiswa } from "@prisma/client";
+import { Prisma, Dosen, Mahasiswa, Matakuliah } from "@prisma/client";
 
 export class DosenServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -47,7 +47,7 @@ export class DosenServiceBase {
     return this.prisma.dosen.delete(args);
   }
 
-  async findNidn(
+  async findMahasiswas(
     parentId: string,
     args: Prisma.MahasiswaFindManyArgs
   ): Promise<Mahasiswa[]> {
@@ -55,6 +55,17 @@ export class DosenServiceBase {
       .findUnique({
         where: { id: parentId },
       })
-      .nidn(args);
+      .mahasiswas(args);
+  }
+
+  async findMatakuliahs(
+    parentId: string,
+    args: Prisma.MatakuliahFindManyArgs
+  ): Promise<Matakuliah[]> {
+    return this.prisma.dosen
+      .findUnique({
+        where: { id: parentId },
+      })
+      .matakuliahs(args);
   }
 }

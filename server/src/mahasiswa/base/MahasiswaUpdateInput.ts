@@ -11,11 +11,23 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { DosenUpdateManyWithoutMahasiswasInput } from "./DosenUpdateManyWithoutMahasiswasInput";
+import { DosenWhereUniqueInput } from "../../dosen/base/DosenWhereUniqueInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
 @InputType()
 class MahasiswaUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => DosenWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => DosenWhereUniqueInput)
+  @IsOptional()
+  @Field(() => DosenWhereUniqueInput, {
+    nullable: true,
+  })
+  dosenpa?: DosenWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -25,19 +37,7 @@ class MahasiswaUpdateInput {
   @Field(() => String, {
     nullable: true,
   })
-  namaMahasiswa?: string;
-
-  @ApiProperty({
-    required: false,
-    type: () => DosenUpdateManyWithoutMahasiswasInput,
-  })
-  @ValidateNested()
-  @Type(() => DosenUpdateManyWithoutMahasiswasInput)
-  @IsOptional()
-  @Field(() => DosenUpdateManyWithoutMahasiswasInput, {
-    nullable: true,
-  })
-  nidnDosen?: DosenUpdateManyWithoutMahasiswasInput;
+  nama?: string | null;
 
   @ApiProperty({
     required: false,
