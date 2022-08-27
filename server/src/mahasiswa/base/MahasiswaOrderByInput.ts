@@ -34,6 +34,15 @@ class MahasiswaOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  dosenpaId?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   id?: SortOrder;
 
   @ApiProperty({
@@ -43,7 +52,7 @@ class MahasiswaOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  namaMahasiswa?: SortOrder;
+  nama?: SortOrder;
 
   @ApiProperty({
     required: false,

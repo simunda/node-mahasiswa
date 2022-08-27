@@ -11,12 +11,25 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { StringFilter } from "../../util/StringFilter";
+import { DosenWhereUniqueInput } from "../../dosen/base/DosenWhereUniqueInput";
+import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { IsOptional, ValidateNested } from "class-validator";
-import { DosenListRelationFilter } from "../../dosen/base/DosenListRelationFilter";
+import { StringFilter } from "../../util/StringFilter";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
 @InputType()
 class MahasiswaWhereInput {
+  @ApiProperty({
+    required: false,
+    type: () => DosenWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => DosenWhereUniqueInput)
+  @IsOptional()
+  @Field(() => DosenWhereUniqueInput, {
+    nullable: true,
+  })
+  dosenpa?: DosenWhereUniqueInput;
+
   @ApiProperty({
     required: false,
     type: StringFilter,
@@ -30,26 +43,14 @@ class MahasiswaWhereInput {
 
   @ApiProperty({
     required: false,
-    type: StringFilter,
+    type: StringNullableFilter,
   })
-  @Type(() => StringFilter)
+  @Type(() => StringNullableFilter)
   @IsOptional()
-  @Field(() => StringFilter, {
+  @Field(() => StringNullableFilter, {
     nullable: true,
   })
-  namaMahasiswa?: StringFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => DosenListRelationFilter,
-  })
-  @ValidateNested()
-  @Type(() => DosenListRelationFilter)
-  @IsOptional()
-  @Field(() => DosenListRelationFilter, {
-    nullable: true,
-  })
-  nidnDosen?: DosenListRelationFilter;
+  nama?: StringNullableFilter;
 
   @ApiProperty({
     required: false,

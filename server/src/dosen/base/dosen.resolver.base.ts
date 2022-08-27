@@ -17,7 +17,6 @@ import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { Public } from "../../decorators/public.decorator";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { CreateDosenArgs } from "./CreateDosenArgs";
@@ -28,6 +27,8 @@ import { DosenFindUniqueArgs } from "./DosenFindUniqueArgs";
 import { Dosen } from "./Dosen";
 import { MahasiswaFindManyArgs } from "../../mahasiswa/base/MahasiswaFindManyArgs";
 import { Mahasiswa } from "../../mahasiswa/base/Mahasiswa";
+import { MatakuliahFindManyArgs } from "../../matakuliah/base/MatakuliahFindManyArgs";
+import { Matakuliah } from "../../matakuliah/base/Matakuliah";
 import { DosenService } from "../dosen.service";
 
 @graphql.Resolver(() => Dosen)
@@ -38,8 +39,12 @@ export class DosenResolverBase {
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
-  @Public()
   @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "read",
+    possession: "any",
+  })
   async _dosensMeta(
     @graphql.Args() args: DosenFindManyArgs
   ): Promise<MetaQueryPayload> {
@@ -53,8 +58,13 @@ export class DosenResolverBase {
     };
   }
 
-  @Public()
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [Dosen])
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "read",
+    possession: "any",
+  })
   async dosens(@graphql.Args() args: DosenFindManyArgs): Promise<Dosen[]> {
     return this.service.findMany(args);
   }
@@ -143,11 +153,31 @@ export class DosenResolverBase {
     action: "read",
     possession: "any",
   })
-  async nidn(
+  async mahasiswas(
     @graphql.Parent() parent: Dosen,
     @graphql.Args() args: MahasiswaFindManyArgs
   ): Promise<Mahasiswa[]> {
-    const results = await this.service.findNidn(parent.id, args);
+    const results = await this.service.findMahasiswas(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Matakuliah])
+  @nestAccessControl.UseRoles({
+    resource: "Matakuliah",
+    action: "read",
+    possession: "any",
+  })
+  async matakuliahs(
+    @graphql.Parent() parent: Dosen,
+    @graphql.Args() args: MatakuliahFindManyArgs
+  ): Promise<Matakuliah[]> {
+    const results = await this.service.findMatakuliahs(parent.id, args);
 
     if (!results) {
       return [];

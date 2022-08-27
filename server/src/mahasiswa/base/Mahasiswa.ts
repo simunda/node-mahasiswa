@@ -11,7 +11,7 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, ValidateNested, IsOptional } from "class-validator";
+import { IsDate, ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
 import { Dosen } from "../../dosen/base/Dosen";
 @ObjectType()
@@ -25,6 +25,15 @@ class Mahasiswa {
   createdAt!: Date;
 
   @ApiProperty({
+    required: false,
+    type: () => Dosen,
+  })
+  @ValidateNested()
+  @Type(() => Dosen)
+  @IsOptional()
+  dosenpa?: Dosen | null;
+
+  @ApiProperty({
     required: true,
     type: String,
   })
@@ -33,21 +42,15 @@ class Mahasiswa {
   id!: string;
 
   @ApiProperty({
-    required: true,
+    required: false,
     type: String,
   })
   @IsString()
-  @Field(() => String)
-  namaMahasiswa!: string;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Dosen],
-  })
-  @ValidateNested()
-  @Type(() => Dosen)
   @IsOptional()
-  nidnDosen?: Array<Dosen>;
+  @Field(() => String, {
+    nullable: true,
+  })
+  nama!: string | null;
 
   @ApiProperty({
     required: true,
