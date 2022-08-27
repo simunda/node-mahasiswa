@@ -21,16 +21,12 @@ import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { MahasiswaService } from "../mahasiswa.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
-import { Public } from "../../decorators/public.decorator";
 import { MahasiswaCreateInput } from "./MahasiswaCreateInput";
 import { MahasiswaWhereInput } from "./MahasiswaWhereInput";
 import { MahasiswaWhereUniqueInput } from "./MahasiswaWhereUniqueInput";
 import { MahasiswaFindManyArgs } from "./MahasiswaFindManyArgs";
 import { MahasiswaUpdateInput } from "./MahasiswaUpdateInput";
 import { Mahasiswa } from "./Mahasiswa";
-import { DosenFindManyArgs } from "../../dosen/base/DosenFindManyArgs";
-import { Dosen } from "../../dosen/base/Dosen";
-import { DosenWhereUniqueInput } from "../../dosen/base/DosenWhereUniqueInput";
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class MahasiswaControllerBase {
@@ -50,11 +46,26 @@ export class MahasiswaControllerBase {
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(@common.Body() data: MahasiswaCreateInput): Promise<Mahasiswa> {
     return await this.service.create({
-      data: data,
+      data: {
+        ...data,
+
+        nidns: data.nidns
+          ? {
+              connect: data.nidns,
+            }
+          : undefined,
+      },
       select: {
         createdAt: true,
         id: true,
-        namaMahasiswa: true,
+        nama: true,
+
+        nidns: {
+          select: {
+            id: true,
+          },
+        },
+
         npm: true,
         updatedAt: true,
       },
@@ -78,7 +89,14 @@ export class MahasiswaControllerBase {
       select: {
         createdAt: true,
         id: true,
-        namaMahasiswa: true,
+        nama: true,
+
+        nidns: {
+          select: {
+            id: true,
+          },
+        },
+
         npm: true,
         updatedAt: true,
       },
@@ -103,7 +121,14 @@ export class MahasiswaControllerBase {
       select: {
         createdAt: true,
         id: true,
-        namaMahasiswa: true,
+        nama: true,
+
+        nidns: {
+          select: {
+            id: true,
+          },
+        },
+
         npm: true,
         updatedAt: true,
       },
@@ -133,11 +158,26 @@ export class MahasiswaControllerBase {
     try {
       return await this.service.update({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          nidns: data.nidns
+            ? {
+                connect: data.nidns,
+              }
+            : undefined,
+        },
         select: {
           createdAt: true,
           id: true,
-          namaMahasiswa: true,
+          nama: true,
+
+          nidns: {
+            select: {
+              id: true,
+            },
+          },
+
           npm: true,
           updatedAt: true,
         },
@@ -170,7 +210,14 @@ export class MahasiswaControllerBase {
         select: {
           createdAt: true,
           id: true,
-          namaMahasiswa: true,
+          nama: true,
+
+          nidns: {
+            select: {
+              id: true,
+            },
+          },
+
           npm: true,
           updatedAt: true,
         },
@@ -183,97 +230,5 @@ export class MahasiswaControllerBase {
       }
       throw error;
     }
-  }
-
-  @Public()
-  @common.Get("/:id/nidnDosen")
-  @ApiNestedQuery(DosenFindManyArgs)
-  async findManyNidnDosen(
-    @common.Req() request: Request,
-    @common.Param() params: MahasiswaWhereUniqueInput
-  ): Promise<Dosen[]> {
-    const query = plainToClass(DosenFindManyArgs, request.query);
-    const results = await this.service.findNidnDosen(params.id, {
-      ...query,
-      select: {
-        createdAt: true,
-        id: true,
-        mahasiswa: true,
-        namaDosen: true,
-        updatedAt: true,
-      },
-    });
-    if (results === null) {
-      throw new errors.NotFoundException(
-        `No resource was found for ${JSON.stringify(params)}`
-      );
-    }
-    return results;
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Mahasiswa",
-    action: "update",
-    possession: "any",
-  })
-  @common.Post("/:id/nidnDosen")
-  async connectNidnDosen(
-    @common.Param() params: MahasiswaWhereUniqueInput,
-    @common.Body() body: DosenWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      nidnDosen: {
-        connect: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Mahasiswa",
-    action: "update",
-    possession: "any",
-  })
-  @common.Patch("/:id/nidnDosen")
-  async updateNidnDosen(
-    @common.Param() params: MahasiswaWhereUniqueInput,
-    @common.Body() body: DosenWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      nidnDosen: {
-        set: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Mahasiswa",
-    action: "update",
-    possession: "any",
-  })
-  @common.Delete("/:id/nidnDosen")
-  async disconnectNidnDosen(
-    @common.Param() params: MahasiswaWhereUniqueInput,
-    @common.Body() body: DosenWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      nidnDosen: {
-        disconnect: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
   }
 }

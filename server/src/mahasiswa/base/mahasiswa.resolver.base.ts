@@ -19,14 +19,12 @@ import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { Public } from "../../decorators/public.decorator";
 import { CreateMahasiswaArgs } from "./CreateMahasiswaArgs";
 import { UpdateMahasiswaArgs } from "./UpdateMahasiswaArgs";
 import { DeleteMahasiswaArgs } from "./DeleteMahasiswaArgs";
 import { MahasiswaFindManyArgs } from "./MahasiswaFindManyArgs";
 import { MahasiswaFindUniqueArgs } from "./MahasiswaFindUniqueArgs";
 import { Mahasiswa } from "./Mahasiswa";
-import { DosenFindManyArgs } from "../../dosen/base/DosenFindManyArgs";
 import { Dosen } from "../../dosen/base/Dosen";
 import { MahasiswaService } from "../mahasiswa.service";
 
@@ -99,7 +97,15 @@ export class MahasiswaResolverBase {
   ): Promise<Mahasiswa> {
     return await this.service.create({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        nidns: args.data.nidns
+          ? {
+              connect: args.data.nidns,
+            }
+          : undefined,
+      },
     });
   }
 
@@ -116,7 +122,15 @@ export class MahasiswaResolverBase {
     try {
       return await this.service.update({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          nidns: args.data.nidns
+            ? {
+                connect: args.data.nidns,
+              }
+            : undefined,
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -149,18 +163,19 @@ export class MahasiswaResolverBase {
     }
   }
 
-  @Public()
-  @graphql.ResolveField(() => [Dosen])
-  async nidnDosen(
-    @graphql.Parent() parent: Mahasiswa,
-    @graphql.Args() args: DosenFindManyArgs
-  ): Promise<Dosen[]> {
-    const results = await this.service.findNidnDosen(parent.id, args);
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => Dosen, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "read",
+    possession: "any",
+  })
+  async nidns(@graphql.Parent() parent: Mahasiswa): Promise<Dosen | null> {
+    const result = await this.service.getNidns(parent.id);
 
-    if (!results) {
-      return [];
+    if (!result) {
+      return null;
     }
-
-    return results;
+    return result;
   }
 }

@@ -17,7 +17,6 @@ import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { Public } from "../../decorators/public.decorator";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { CreateDosenArgs } from "./CreateDosenArgs";
@@ -38,8 +37,12 @@ export class DosenResolverBase {
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
-  @Public()
   @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "read",
+    possession: "any",
+  })
   async _dosensMeta(
     @graphql.Args() args: DosenFindManyArgs
   ): Promise<MetaQueryPayload> {
@@ -53,8 +56,13 @@ export class DosenResolverBase {
     };
   }
 
-  @Public()
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [Dosen])
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "read",
+    possession: "any",
+  })
   async dosens(@graphql.Args() args: DosenFindManyArgs): Promise<Dosen[]> {
     return this.service.findMany(args);
   }

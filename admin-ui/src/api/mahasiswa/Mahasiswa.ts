@@ -3,8 +3,8 @@ import { Dosen } from "../dosen/Dosen";
 export type Mahasiswa = {
   createdAt: Date;
   id: string;
-  namaMahasiswa: string;
-  nidnDosen?: Array<Dosen>;
+  nama: string | null;
+  nidns?: Dosen | null;
   npm: string;
   updatedAt: Date;
 };

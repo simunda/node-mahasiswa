@@ -12,7 +12,7 @@ https://docs.amplication.com/docs/how-to/custom-code
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { DosenUpdateManyWithoutMahasiswasInput } from "./DosenUpdateManyWithoutMahasiswasInput";
+import { DosenWhereUniqueInput } from "../../dosen/base/DosenWhereUniqueInput";
 import { Type } from "class-transformer";
 @InputType()
 class MahasiswaUpdateInput {
@@ -25,19 +25,19 @@ class MahasiswaUpdateInput {
   @Field(() => String, {
     nullable: true,
   })
-  namaMahasiswa?: string;
+  nama?: string | null;
 
   @ApiProperty({
     required: false,
-    type: () => DosenUpdateManyWithoutMahasiswasInput,
+    type: () => DosenWhereUniqueInput,
   })
   @ValidateNested()
-  @Type(() => DosenUpdateManyWithoutMahasiswasInput)
+  @Type(() => DosenWhereUniqueInput)
   @IsOptional()
-  @Field(() => DosenUpdateManyWithoutMahasiswasInput, {
+  @Field(() => DosenWhereUniqueInput, {
     nullable: true,
   })
-  nidnDosen?: DosenUpdateManyWithoutMahasiswasInput;
+  nidns?: DosenWhereUniqueInput | null;
 
   @ApiProperty({
     required: false,
