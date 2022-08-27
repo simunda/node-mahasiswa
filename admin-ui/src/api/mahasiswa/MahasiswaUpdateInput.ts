@@ -1,7 +1,7 @@
-import { DosenUpdateManyWithoutMahasiswasInput } from "./DosenUpdateManyWithoutMahasiswasInput";
+import { DosenWhereUniqueInput } from "../dosen/DosenWhereUniqueInput";
 
 export type MahasiswaUpdateInput = {
-  namaMahasiswa?: string;
-  nidnDosen?: DosenUpdateManyWithoutMahasiswasInput;
+  dosenpa?: DosenWhereUniqueInput | null;
+  nama?: string | null;
   npm?: string;
 };

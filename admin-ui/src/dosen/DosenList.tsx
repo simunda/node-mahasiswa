@@ -7,15 +7,15 @@ export const DosenList = (props: ListProps): React.ReactElement => {
     <List
       {...props}
       bulkActionButtons={false}
-      title={"Dosens"}
+      title={"dosens"}
       perPage={50}
       pagination={<Pagination />}
     >
       <Datagrid rowClick="show">
         <DateField source="createdAt" label="Created At" />
         <TextField label="ID" source="id" />
-        <TextField label="Mahasiswa" source="mahasiswa" />
-        <TextField label="nama_dosen" source="namaDosen" />
+        <TextField label="nama" source="nama" />
+        <TextField label="nidn" source="nidn" />
         <DateField source="updatedAt" label="Updated At" />
       </Datagrid>
     </List>
