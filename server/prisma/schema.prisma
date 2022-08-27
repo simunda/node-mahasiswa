@@ -19,19 +19,18 @@ model User {
 }
 
 model Mahasiswa {
-  createdAt     DateTime @default(now())
-  id            String   @id @default(cuid())
-  namaMahasiswa String
-  nidnDosen     Dosen[]
-  npm           String   @unique
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  nama      String?
+  nidns     Dosen?   @relation(fields: [nidnsId], references: [id])
+  nidnsId   String?
+  npm       String
+  updatedAt DateTime @updatedAt
 }
 
 model Dosen {
   createdAt DateTime    @default(now())
   id        String      @id @default(cuid())
-  mahasiswa String?
-  namaDosen String?
   nidn      Mahasiswa[]
   updatedAt DateTime    @updatedAt
 }

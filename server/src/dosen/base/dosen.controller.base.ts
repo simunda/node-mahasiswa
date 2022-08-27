@@ -20,7 +20,6 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { DosenService } from "../dosen.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { Public } from "../../decorators/public.decorator";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { DosenCreateInput } from "./DosenCreateInput";
 import { DosenWhereInput } from "./DosenWhereInput";
@@ -54,14 +53,17 @@ export class DosenControllerBase {
       select: {
         createdAt: true,
         id: true,
-        mahasiswa: true,
-        namaDosen: true,
         updatedAt: true,
       },
     });
   }
 
-  @Public()
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @nestAccessControl.UseRoles({
+    resource: "Dosen",
+    action: "read",
+    possession: "any",
+  })
   @common.Get()
   @swagger.ApiOkResponse({ type: [Dosen] })
   @swagger.ApiForbiddenResponse()
@@ -73,8 +75,6 @@ export class DosenControllerBase {
       select: {
         createdAt: true,
         id: true,
-        mahasiswa: true,
-        namaDosen: true,
         updatedAt: true,
       },
     });
@@ -98,8 +98,6 @@ export class DosenControllerBase {
       select: {
         createdAt: true,
         id: true,
-        mahasiswa: true,
-        namaDosen: true,
         updatedAt: true,
       },
     });
@@ -132,8 +130,6 @@ export class DosenControllerBase {
         select: {
           createdAt: true,
           id: true,
-          mahasiswa: true,
-          namaDosen: true,
           updatedAt: true,
         },
       });
@@ -165,8 +161,6 @@ export class DosenControllerBase {
         select: {
           createdAt: true,
           id: true,
-          mahasiswa: true,
-          namaDosen: true,
           updatedAt: true,
         },
       });
@@ -198,7 +192,14 @@ export class DosenControllerBase {
       select: {
         createdAt: true,
         id: true,
-        namaMahasiswa: true,
+        nama: true,
+
+        nidns: {
+          select: {
+            id: true,
+          },
+        },
+
         npm: true,
         updatedAt: true,
       },

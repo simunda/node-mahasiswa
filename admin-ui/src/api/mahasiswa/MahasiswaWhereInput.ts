@@ -1,9 +1,10 @@
 import { StringFilter } from "../../util/StringFilter";
-import { DosenListRelationFilter } from "../dosen/DosenListRelationFilter";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
+import { DosenWhereUniqueInput } from "../dosen/DosenWhereUniqueInput";
 
 export type MahasiswaWhereInput = {
   id?: StringFilter;
-  namaMahasiswa?: StringFilter;
-  nidnDosen?: DosenListRelationFilter;
+  nama?: StringNullableFilter;
+  nidns?: DosenWhereUniqueInput;
   npm?: StringFilter;
 };

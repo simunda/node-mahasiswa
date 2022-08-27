@@ -43,24 +43,6 @@ class DosenOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  mahasiswa?: SortOrder;
-
-  @ApiProperty({
-    required: false,
-    enum: ["asc", "desc"],
-  })
-  @Field(() => SortOrder, {
-    nullable: true,
-  })
-  namaDosen?: SortOrder;
-
-  @ApiProperty({
-    required: false,
-    enum: ["asc", "desc"],
-  })
-  @Field(() => SortOrder, {
-    nullable: true,
-  })
   updatedAt?: SortOrder;
 }
 

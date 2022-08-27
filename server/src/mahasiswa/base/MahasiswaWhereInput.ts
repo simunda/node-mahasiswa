@@ -14,7 +14,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
-import { DosenListRelationFilter } from "../../dosen/base/DosenListRelationFilter";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
+import { DosenWhereUniqueInput } from "../../dosen/base/DosenWhereUniqueInput";
 @InputType()
 class MahasiswaWhereInput {
   @ApiProperty({
@@ -30,26 +31,26 @@ class MahasiswaWhereInput {
 
   @ApiProperty({
     required: false,
-    type: StringFilter,
+    type: StringNullableFilter,
   })
-  @Type(() => StringFilter)
+  @Type(() => StringNullableFilter)
   @IsOptional()
-  @Field(() => StringFilter, {
+  @Field(() => StringNullableFilter, {
     nullable: true,
   })
-  namaMahasiswa?: StringFilter;
+  nama?: StringNullableFilter;
 
   @ApiProperty({
     required: false,
-    type: () => DosenListRelationFilter,
+    type: () => DosenWhereUniqueInput,
   })
   @ValidateNested()
-  @Type(() => DosenListRelationFilter)
+  @Type(() => DosenWhereUniqueInput)
   @IsOptional()
-  @Field(() => DosenListRelationFilter, {
+  @Field(() => DosenWhereUniqueInput, {
     nullable: true,
   })
-  nidnDosen?: DosenListRelationFilter;
+  nidns?: DosenWhereUniqueInput;
 
   @ApiProperty({
     required: false,
